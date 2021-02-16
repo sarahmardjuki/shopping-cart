@@ -1,5 +1,6 @@
 # shopping_cart.py
 
+# dictionary with products list
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -23,7 +24,7 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-
+# function to apply currency formatting
 def to_usd(my_price):
     """
     Converts a numeric value to usd-formatted string, for printing and display purposes.
@@ -39,4 +40,21 @@ def to_usd(my_price):
 
 # TODO: write some Python code here to produce the desired output
 
-print(products)
+# capture user input, continue asking for user input until user inputs 'DONE'
+selection = []
+product_selection = None
+num_products = len(products)
+
+while product_selection != "DONE":
+    if product_selection == None:
+        next
+    elif int(product_selection) > num_products:
+        print("There is no product with that identifier. Please try again!")
+        next
+    else:
+        selection.append(int(product_selection))
+    product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
+
+# data validate the user input
+print("here")
+print(selection)
