@@ -43,7 +43,7 @@ def to_usd(my_price):
 # TODO: write some Python code here to produce the desired output
 
 # capture user input, continue asking for user input until user inputs 'DONE'
-selection = {}
+selection = []
 product_selection = None
 num_products = len(products)
 
@@ -54,21 +54,29 @@ while product_selection != "DONE":
         print("There is no product with that identifier. Please try again!")
         next
     else:
-        key = int(product_selection)
-        value = [p for p in products if str(p["id"]) == str(product_selection)]
-        selection[key] = value
+        for p in products:
+            if str(p["id"]) == str(product_selection):
+                product_dict = p        
+        selection.append(product_dict)
     product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
 
 # OUTPUT
 
 # header
-print("-----------------------------")
+print("-------------------------------------")
 print("MSB Groceries")
 print("msbgroceries.com")
-print("-----------------------------")
+print("-------------------------------------")
 
 # date and time
 current_datetime = datetime.now()
 current_datetime_str = current_datetime.strftime('%Y-%m-%d %I:%M %p')
 print(f"Checkout At: {current_datetime_str}")
 
+# print selected products
+print("-------------------------------------")
+for x in selection:
+    product_name = x["name"]
+    product_price = to_usd(x["price"])
+    print(f"... {product_name} ({product_price})")
+print("-------------------------------------")
