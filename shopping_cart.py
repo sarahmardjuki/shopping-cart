@@ -1,5 +1,7 @@
 # shopping_cart.py
 
+from datetime import datetime
+
 # dictionary with products list
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
@@ -57,5 +59,16 @@ while product_selection != "DONE":
         selection[key] = value
     product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
 
-# data validate the user input
-print(selection)
+# OUTPUT
+
+# header
+print("-----------------------------")
+print("MSB Groceries")
+print("msbgroceries.com")
+print("-----------------------------")
+
+# date and time
+current_datetime = datetime.now()
+current_datetime_str = current_datetime.strftime('%Y-%m-%d %I:%M %p')
+print(f"Checkout At: {current_datetime_str}")
+
