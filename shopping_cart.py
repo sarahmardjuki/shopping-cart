@@ -44,11 +44,11 @@ def to_usd(my_price):
 
 # capture user input, continue asking for user input until user inputs 'DONE'
 selection = []
-product_selection = None
+product_selection = ""
 num_products = len(products)
 
-while product_selection != "DONE":
-    if product_selection == None:
+while product_selection.lower() != "done":
+    if product_selection == "":
         next
     elif int(product_selection) > num_products:
         print("There is no product with that identifier. Please try again!")
