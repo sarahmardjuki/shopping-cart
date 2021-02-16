@@ -73,10 +73,33 @@ current_datetime = datetime.now()
 current_datetime_str = current_datetime.strftime('%Y-%m-%d %I:%M %p')
 print(f"Checkout At: {current_datetime_str}")
 
-# print selected products
+# print selected products and capture running total
+total = 0
+
 print("-------------------------------------")
 for x in selection:
     product_name = x["name"]
+    total += float(x["price"])
     product_price = to_usd(x["price"])
     print(f"... {product_name} ({product_price})")
+print("-------------------------------------")
+
+# subtotal
+total_str = to_usd(total)
+print(f"Subtotal: {total_str}")
+
+# tax
+tax_rate = .0875
+tax = tax_rate * total
+tax_str = to_usd(tax)
+print(f"Tax: {tax_str}")
+
+# subtotal
+subtotal = total + tax
+subtotal_str = to_usd(subtotal)
+print(f"Total: {subtotal_str}")
+
+# ending
+print("-------------------------------------")
+print("Thanks, see you again soon!")
 print("-------------------------------------")
