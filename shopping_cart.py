@@ -58,7 +58,11 @@ product_selection = ""
 num_products = len(products)
 
 while product_selection.lower() != "done":
-    if product_selection == "":
+    product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
+
+    if product_selection.lower() == "done":
+        next
+    elif product_selection == "":
         next
     elif int(product_selection) > num_products:
         print("There is no product with that identifier. Please try again!")
@@ -68,7 +72,19 @@ while product_selection.lower() != "done":
             if str(p["id"]) == str(product_selection):
                 product_dict = p        
         selection.append(product_dict)
-    product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
+    
+    
+
+    # check to see if priced by item or pound
+    for p in products:
+        if str(p["id"]) == str(product_selection):
+            if p["price_per"] == "item":
+                next
+            else:
+                selected_item = p["name"]
+                num_pounds = input(f"Please enter the number of pounds of {selected_item}: ")
+                selection[len(selection)-1]["price"] = float(selection[len(selection)-1]["price"]) * float(num_pounds)
+            
 
 # OUTPUT
 
