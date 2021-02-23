@@ -56,10 +56,10 @@ First, go to the [Google Developer Console](https://console.developers.google.co
 3. Move a copy of the credentials into your project repository, into a new directory called "auth".
 4. Add the following code to your ".gitignore" file so the API credentials are not uploaded to GitHub.
 
-'''sh
+```sh
 .env
 auth/google-credentials.json
-'''
+```
 
 ### Configure the Spreadsheet Document
 From here, you have two options. You can use the [example sheet](https://docs.google.com/spreadsheets/d/1ItN7Cc2Yn4K90cMIsxi2P045Gzw0y2JHB_EkV4mXXpI/edit?pli=1#gid=1279928033), or you can create your own. 
