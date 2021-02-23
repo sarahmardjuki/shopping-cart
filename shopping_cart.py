@@ -7,6 +7,7 @@ from dotenv import load_dotenv # see: https://github.com/theskumar/python-dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
+
 #set the environment vars
 load_dotenv() # invokes / uses the function we got from the third-party package. this one happens to read env vars from the ".env" file. see the package docs for more info
 TAX_RATE = os.getenv("TAX_Rate", default=.0875) # uses the os module to read the specified environment variable and store it in a corresponding python variable
@@ -196,29 +197,41 @@ with open(file_name, "w") as file:
 
 ## send receipt via email
 
-SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
-SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+if emailreceipt.lower() == "yes":
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+    SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+    SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
 
-client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
-print("CLIENT:", type(client))
+    template_data = {
+        "total_price_usd": "",
+        "human_friendly_timestamp": "",
+        "products":[
+        ]
+    } 
 
-subject = "Your Receipt from the Green Grocery Store"
+    template_data["total_price_usd"] = subtotal_str
+    current_datetime_str2 = current_datetime.strftime('%B %d, %Y %I:%M %p')
+    template_data["human_friendly_timestamp"] = current_datetime_str2
+    
+    for x in selection:
+        template_data["products"].append(x)
+    
 
-html_content = "Hello World"
-print("HTML:", html_content)
+    client = SendGridAPIClient(SENDGRID_API_KEY)
+    print("CLIENT:", type(client))
 
-# FYI: we'll need to use our verified SENDER_ADDRESS as the `from_email` param
-# ... but we can customize the `to_emails` param to send to other addresses
-message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
+    message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS)
+    message.template_id = SENDGRID_TEMPLATE_ID
+    message.dynamic_template_data = template_data
+    print("MESSAGE:", type(message))
 
-try:
-    response = client.send(message)
+    try:
+        response = client.send(message)
+        print("RESPONSE:", type(response))
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
 
-    print("RESPONSE:", type(response)) #> <class 'python_http_client.client.Response'>
-    print(response.status_code) #> 202 indicates SUCCESS
-    print(response.body)
-    print(response.headers)
-
-except Exception as err:
-    print(type(err))
-    print(err)
+    except Exception as err:
+        print(type(err))
+        print(err)

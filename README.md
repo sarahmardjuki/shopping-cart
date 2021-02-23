@@ -32,6 +32,7 @@ Once you're inside the virtual environment, install the packages before trying t
 
 ```sh
 pip install -r requirements.txt
+pip install sendgrid
 ```
 
 ## Setup: How to Configure Sales Tax Rate for Specific State
@@ -44,6 +45,37 @@ TAX_RATE = .08
 
 The program will now update with your specified tax rate.
 
+## Setup: How to Configure the Emailed Receipts
+
+### Sending Emails with SendGrid
+First, ensure you have or sign up for a [SendGrid account](https://signup.sendgrid.com/). Make sure you confirm your email and verify your account. Complete your "Single Sender Verification" with your desired email. 
+
+Second, create a SendGrid API Key, and click the option for "full access" permissions. Store the API Key in an environment variable called "SENDGRID_API_KEY". 
+
+Third, create an environment variable called "SENDER_ADDRESS" and set it equal to the email address you used during the Single Sender Verification process above. 
+
+## Configuring the Email Template
+First, [create a template](https://sendgrid.com/dynamic_templates) with the button in the top right. Copy the template identifier value and store it in an environment value called "SENDGRID_TEMPLATE_ID". 
+
+To customize the email template, copy and paste the following code into the "Code" tab. 
+
+'''sh
+<img src="https://www.shareicon.net/data/128x128/2016/05/04/759867_food_512x512.png">
+
+<h3>Hello this is your receipt</h3>
+
+<p>Date: {{human_friendly_timestamp}}</p>
+
+<ul>
+{{#each products}}
+	<li>You ordered: ... {{this.name}}</li>
+{{/each}}
+</ul>
+
+<p>Total: {{total_price_usd}}</p>
+'''
+
+You may adjust the formatting of this, but make sure you have some mention of "human_friendly_timestamp", "products", "and "total_price_usd" in your template.
 
 ## Usage
 
