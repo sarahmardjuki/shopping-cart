@@ -84,7 +84,7 @@ First, [create a template](https://sendgrid.com/dynamic_templates) with the butt
 
 To customize the email template, copy and paste the following code into the "Code" tab. 
 
-
+```sh
 <img src="https://www.shareicon.net/data/128x128/2016/05/04/759867_food_512x512.png">
 
 <h3>Hello this is your receipt</h3>
@@ -98,7 +98,7 @@ To customize the email template, copy and paste the following code into the "Cod
 </ul>
 
 <p>Total: {{total_price_usd}}</p>
-
+```
 
 You may adjust the formatting of this, but make sure you have some mention of "human_friendly_timestamp", "products", "and "total_price_usd" in your template.
 
