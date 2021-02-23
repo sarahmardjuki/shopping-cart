@@ -4,39 +4,44 @@
 from datetime import datetime
 import os
 from dotenv import load_dotenv # see: https://github.com/theskumar/python-dotenv
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 #set the environment vars
 load_dotenv() # invokes / uses the function we got from the third-party package. this one happens to read env vars from the ".env" file. see the package docs for more info
 TAX_RATE = os.getenv("TAX_Rate", default=.0875) # uses the os module to read the specified environment variable and store it in a corresponding python variable
+DOCUMENT_ID = os.getenv("GOOGLE_SHEET_ID", default="OOPS")
+SHEET_NAME = os.getenv("SHEET_NAME", default="products-per-lb")
+CREDENTIALS_FILEPATH = os.path.join(os.path.dirname(__file__), "auth", "google-credentials.json")
+AUTH_SCOPE = [
+    "https://www.googleapis.com/auth/spreadsheets", #> Allows read/write access to the user's sheets and their properties.
+    "https://www.googleapis.com/auth/drive.file" #> Per-file access to files created or opened by the app.
+]
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
+SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+## IMPORT PRODUCTS
+
+# authorization
+credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILEPATH, AUTH_SCOPE)
+client = gspread.authorize(credentials)
+
+# read values
+
+doc = client.open_by_key(DOCUMENT_ID)
+sheet = doc.worksheet(SHEET_NAME)
+rows = sheet.get_all_records()
+
+products = []
+for row in rows:
+    products.append(row)
 
 
-# dictionary with products list
-products = [
-    {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50, "price_per": "item"},
-    {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99, "price_per": "item"},
-    {"id":3, "name": "Robust Golden Unsweetened Oolong Tea", "department": "beverages", "aisle": "tea", "price": 2.49, "price_per": "item"},
-    {"id":4, "name": "Smart Ones Classic Favorites Mini Rigatoni With Vodka Cream Sauce", "department": "frozen", "aisle": "frozen meals", "price": 6.99, "price_per": "item"},
-    {"id":5, "name": "Green Chile Anytime Sauce", "department": "pantry", "aisle": "marinades meat preparation", "price": 7.99, "price_per": "item"},
-    {"id":6, "name": "Dry Nose Oil", "department": "personal care", "aisle": "cold flu allergy", "price": 21.99, "price_per": "item"},
-    {"id":7, "name": "Pure Coconut Water With Orange", "department": "beverages", "aisle": "juice nectars", "price": 3.50, "price_per": "item"},
-    {"id":8, "name": "Cut Russet Potatoes Steam N' Mash", "department": "frozen", "aisle": "frozen produce", "price": 4.25, "price_per": "item"},
-    {"id":9, "name": "Light Strawberry Blueberry Yogurt", "department": "dairy eggs", "aisle": "yogurt", "price": 6.50, "price_per": "item"},
-    {"id":10, "name": "Sparkling Orange Juice & Prickly Pear Beverage", "department": "beverages", "aisle": "water seltzer sparkling water", "price": 2.99, "price_per": "item"},
-    {"id":11, "name": "Peach Mango Juice", "department": "beverages", "aisle": "refrigerated", "price": 1.99, "price_per": "item"},
-    {"id":12, "name": "Chocolate Fudge Layer Cake", "department": "frozen", "aisle": "frozen dessert", "price": 18.50, "price_per": "item"},
-    {"id":13, "name": "Saline Nasal Mist", "department": "personal care", "aisle": "cold flu allergy", "price": 16.00, "price_per": "item"},
-    {"id":14, "name": "Fresh Scent Dishwasher Cleaner", "department": "household", "aisle": "dish detergents", "price": 4.99, "price_per": "item"},
-    {"id":15, "name": "Overnight Diapers Size 6", "department": "babies", "aisle": "diapers wipes", "price": 25.50, "price_per": "item"},
-    {"id":16, "name": "Mint Chocolate Flavored Syrup", "department": "snacks", "aisle": "ice cream toppings", "price": 4.50, "price_per": "item"},
-    {"id":17, "name": "Rendered Duck Fat", "department": "meat seafood", "aisle": "poultry counter", "price": 9.99, "price_per": "item"},
-    {"id":18, "name": "Pizza for One Suprema Frozen Pizza", "department": "frozen", "aisle": "frozen pizza", "price": 12.50, "price_per": "item"},
-    {"id":19, "name": "Gluten Free Quinoa Three Cheese & Mushroom Blend", "department": "dry goods pasta", "aisle": "grains rice dried goods", "price": 3.99, "price_per": "item"},
-    {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "item"},
-    {"id":21, "name": "Organic Bananas", "price":.79, "price_per": "pound"}
-] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
 # function to apply currency formatting
 def to_usd(my_price):
@@ -61,9 +66,11 @@ num_products = len(products)
 
 while True:
     product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
-
     if product_selection.lower() == "done":
         break
+    elif product_selection.isnumeric() == False:
+        print("There is no product with that identifier. Please try again! Make sure your product identifier is an integer.")
+        next
     elif int(product_selection) > num_products:
         print("There is no product with that identifier. Please try again!")
         next
@@ -198,10 +205,7 @@ with open(file_name, "w") as file:
 ## send receipt via email
 
 if emailreceipt.lower() == "yes":
-    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
-    SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
-    SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
-
+    
     template_data = {
         "total_price_usd": "",
         "human_friendly_timestamp": "",
@@ -218,20 +222,19 @@ if emailreceipt.lower() == "yes":
     
 
     client = SendGridAPIClient(SENDGRID_API_KEY)
-    print("CLIENT:", type(client))
 
     message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS)
     message.template_id = SENDGRID_TEMPLATE_ID
     message.dynamic_template_data = template_data
-    print("MESSAGE:", type(message))
 
     try:
         response = client.send(message)
-        print("RESPONSE:", type(response))
-        print(response.status_code)
-        print(response.body)
-        print(response.headers)
-
+ 
     except Exception as err:
         print(type(err))
         print(err)
+
+    print("Receipt has been emailed!")
+
+
+        
