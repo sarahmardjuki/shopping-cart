@@ -139,4 +139,4 @@ dmypy.json
 __pycache__
 
 # ignore the google api credentials file at the following location:
-google-credentials.json
+auth/google-credentials.json

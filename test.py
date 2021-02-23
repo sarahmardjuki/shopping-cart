@@ -38,9 +38,11 @@ print("CLIENT:", type(client)) #> <class 'gspread.client.Client'>
 print("-----------------")
 print("READING DOCUMENT...")
 
+print("here")
 doc = client.open_by_key(DOCUMENT_ID)
 print("DOC:", type(doc), doc.title) #> <class 'gspread.models.Spreadsheet'>
 
+print("here2")
 sheet = doc.worksheet(SHEET_NAME)
 print("SHEET:", type(sheet), sheet.title)#> <class 'gspread.models.Worksheet'>
 
