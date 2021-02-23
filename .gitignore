@@ -137,3 +137,6 @@ dmypy.json
 
 # ignore some files that may get generated when running python modules:
 __pycache__
+
+# ignore the google api credentials file at the following location:
+google-credentials.json
