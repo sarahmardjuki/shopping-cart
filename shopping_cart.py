@@ -4,7 +4,8 @@
 from datetime import datetime
 import os
 from dotenv import load_dotenv # see: https://github.com/theskumar/python-dotenv
-
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 #set the environment vars
 load_dotenv() # invokes / uses the function we got from the third-party package. this one happens to read env vars from the ".env" file. see the package docs for more info
@@ -62,8 +63,6 @@ while True:
 
     if product_selection.lower() == "done":
         break
-    #elif product_selection == "":
-       # next
     elif int(product_selection) > num_products:
         print("There is no product with that identifier. Please try again!")
         next
@@ -86,7 +85,7 @@ while True:
                 selection[len(selection)-1]["price"] = float(selection[len(selection)-1]["price"]) * float(num_pounds)
             
 
-# OUTPUT
+## OUTPUT
 
 # header
 print("-------------------------------------")
@@ -130,8 +129,17 @@ print("-------------------------------------")
 print("Thanks, see you again soon!")
 print("-------------------------------------")
 
+# ask if customer wants an emailed receipt
 
-# write receipts to file
+while True:
+    emailreceipt = input("Would the customer like a receipt sent via email? (Yes/No): ")
+    if emailreceipt.lower() == "yes" or emailreceipt.lower() == "no":
+        break
+    else:
+        print("Please input either 'Yes' or 'No'.")
+
+
+## write receipts to file
 
 datetime_receiptfilenamestr = current_datetime.strftime('%Y-%m-%d-%H-%M-%S-%f')
 
@@ -184,3 +192,33 @@ with open(file_name, "w") as file:
     file.write("\n")
     file.write("-------------------------------------")
     file.write("\n")
+
+
+## send receipt via email
+
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+print("CLIENT:", type(client))
+
+subject = "Your Receipt from the Green Grocery Store"
+
+html_content = "Hello World"
+print("HTML:", html_content)
+
+# FYI: we'll need to use our verified SENDER_ADDRESS as the `from_email` param
+# ... but we can customize the `to_emails` param to send to other addresses
+message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
+
+try:
+    response = client.send(message)
+
+    print("RESPONSE:", type(response)) #> <class 'python_http_client.client.Response'>
+    print(response.status_code) #> 202 indicates SUCCESS
+    print(response.body)
+    print(response.headers)
+
+except Exception as err:
+    print(type(err))
+    print(err)
