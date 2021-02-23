@@ -1,7 +1,7 @@
 # Shopping Cart
 The following sections will provide setup instructions and command lines needed to run the program from scratch.
 
-This program will allow the user to enter specific product identifiers during checkout to generate an itemized receipt, with subtotal, tax, and total.  
+This program has the following capabilities will allow the user to enter specific product identifiers during checkout to generate an itemized receipt, with subtotal, tax, and total. The program can handle configured sales tax rates, pricing per pound, writing receipts to file, sending receipts via email, and integrating with a Google Sheets Datastore.
 
 ### Acknowledgments
 Based on in class materials from Professor Rossetti. 
