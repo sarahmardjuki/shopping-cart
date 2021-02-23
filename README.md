@@ -57,12 +57,7 @@ First, go to the [Google Developer Console](https://console.developers.google.co
 4. Add the following code to your ".gitignore" file so the API credentials are not uploaded to GitHub.
 
 '''sh
-# the .gitignore file
-
-# ignore environment variables in the ".env" file:
 .env
-
-# ignore the google api credentials file at the following location:
 auth/google-credentials.json
 '''
 
