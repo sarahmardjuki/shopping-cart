@@ -57,13 +57,13 @@ selection = []
 product_selection = ""
 num_products = len(products)
 
-while product_selection.lower() != "done":
+while True:
     product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
 
     if product_selection.lower() == "done":
-        next
-    elif product_selection == "":
-        next
+        break
+    #elif product_selection == "":
+       # next
     elif int(product_selection) > num_products:
         print("There is no product with that identifier. Please try again!")
         next
