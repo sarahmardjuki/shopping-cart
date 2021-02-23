@@ -54,12 +54,7 @@ First, go to the [Google Developer Console](https://console.developers.google.co
 1. Click "Create Credentials," then "Service Account." Name your account (e.g. "spreadsheet-service") and add a role of "Editor".
 2. Click the service account you just created under the "Service Accounts" section, and click "Add Key". Then, select "JSON" to create a credentials file. The file should download automatically.
 3. Move a copy of the credentials into your project repository, into a new directory called "auth".
-4. Add the following code to your ".gitignore" file so the API credentials are not uploaded to GitHub.
-
-```sh
-.env
-auth/google-credentials.json
-```
+4. Ensure that the credentials will not be uploaded to GitHub. If you choose to use a different directory than "auth," make sure to add to the ".gitignore" file with the appropriate file path. 
 
 ### Configure the Spreadsheet Document
 From here, you have two options. You can use the [example sheet](https://docs.google.com/spreadsheets/d/1ItN7Cc2Yn4K90cMIsxi2P045Gzw0y2JHB_EkV4mXXpI/edit?pli=1#gid=1279928033), or you can create your own. 
