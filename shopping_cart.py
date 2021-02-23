@@ -129,3 +129,44 @@ print(f"Total: {subtotal_str}")
 print("-------------------------------------")
 print("Thanks, see you again soon!")
 print("-------------------------------------")
+
+
+# write receipts to file
+
+
+datetime_receiptfilenamestr = current_datetime.strftime('%Y-%m-%d-%H-%M-%S-%f')
+
+file_name = f"/receipts/{datetime_receiptfilenamestr}.txt" 
+
+with open(file_name, "w") as file:
+    # header
+    file.write("-------------------------------------")
+    file.write("MSB Groceries")
+    file.write("msbgroceries.com")
+    file.write("-------------------------------------")
+    
+    # checkout time
+    file.write(f"Checkout At: {current_datetime_str}")
+    file.write("-------------------------------------")
+    
+    # products
+    for x in selection:
+        product_name = x["name"]
+        total += float(x["price"])
+        product_price = to_usd(x["price"])
+        file.write(f"... {product_name} ({product_price})")
+    file.write("-------------------------------------")
+
+    # subtotal
+    file.write(f"Subtotal: {total_str}")
+
+    # tax
+    file.write(f"Tax: {tax_str} ({tax_rate_str} tax rate)")
+
+    # subtotal
+    file.write(f"Total: {subtotal_str}")
+
+    # ending
+    file.write("-------------------------------------")
+    file.write("Thanks, see you again soon!")
+    file.write("-------------------------------------")
