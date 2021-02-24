@@ -13,7 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 #set the environment vars
 load_dotenv() # invokes / uses the function we got from the third-party package. this one happens to read env vars from the ".env" file. see the package docs for more info
-TAX_RATE = os.getenv("TAX_Rate", default=.0875) # uses the os module to read the specified environment variable and store it in a corresponding python variable
+TAX_RATE = os.getenv("TAX_RATE", default=.0875) # uses the os module to read the specified environment variable and store it in a corresponding python variable
 DOCUMENT_ID = os.getenv("GOOGLE_SHEET_ID", default="OOPS")
 SHEET_NAME = os.getenv("SHEET_NAME", default="products-per-lb")
 CREDENTIALS_FILEPATH = os.path.join(os.path.dirname(__file__), "auth", "google-credentials.json")
@@ -122,6 +122,7 @@ total_str = to_usd(total)
 print(f"Subtotal: {total_str}")
 
 # tax
+TAX_RATE = float(TAX_RATE)
 tax = TAX_RATE * total
 tax_str = to_usd(tax)
 tax_rate_str = "{:.2%}".format(TAX_RATE)

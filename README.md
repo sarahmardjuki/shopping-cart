@@ -82,17 +82,19 @@ To customize the email template, copy and paste the following code into the "Cod
 ```sh
 <img src="https://www.shareicon.net/data/128x128/2016/05/04/759867_food_512x512.png">
 
-<h3>Hello this is your receipt</h3>
 
-<p>Date: {{human_friendly_timestamp}}</p>
+        <h3>Your Receipt from MSB Groceries</h3>
 
-<ul>
-{{#each products}}
-	<li>You ordered: ... {{this.name}}</li>
-{{/each}}
-</ul>
+        <p>Date: {{human_friendly_timestamp}}</p>
 
-<p>Total: {{total_price_usd}}</p>
+        <ul>
+        {{#each products}}
+    	<li>You ordered: {{this.name}}</li>
+        {{/each}}
+        </ul>
+
+    <p>Total: {{total_price_usd}}</p>
+         
 ```
 
 You may adjust the formatting of this, but make sure you have some mention of "human_friendly_timestamp", "products", "and "total_price_usd" in your template.
