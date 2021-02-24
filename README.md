@@ -60,10 +60,10 @@ First, go to the [Google Developer Console](https://console.developers.google.co
 From here, you have two options. You can use the [example sheet](https://docs.google.com/spreadsheets/d/1_hisQ9kNjmc-cafIasMue6IQG-ql_6TcqFGpVNOkUSE/edit#gid=0), or you can create your own. 
 
 #### Using the Example Sheet
-If you choose to use the example sheet, create an environment variable called "GOOGLE_SHEET_ID" and set it equal to the document's identifier (e.g. 1_hisQ9kNjmc-cafIasMue6IQG-ql_6TcqFGpVNOkUSE). 
+If you choose to use the example sheet, create an environment variable called "GOOGLE_SHEET_ID" and set it equal to the document's identifier (e.g. 1ItN7Cc2Yn4K90cMIsxi2P045Gzw0y2JHB_EkV4mXXpI). 
 
 #### Using Your Own Sheet
-Make sure your file contains column headers id, name, aisle, department, price, and price_per. If you choose to name your sheet anything other than "Products", create an environment variable called "SHEET_NAME". Finally, change the document's sharing settings to grant "edit" permissions to the "client email" address in the credentials file.
+Make sure your file contains column headers id, name, aisle, department, price, and price_per. If you choose to name your sheet anything other than "products-per-lb", create an environment variable called "SHEET_NAME". Finally, change the document's sharing settings to grant "edit" permissions to the "client email" address in the credentials file.
 
 ## Setup: How to Configure the Emailed Receipts
 
@@ -117,4 +117,11 @@ Now you're ready to use the program! Run the Python script from the command-line
 ```sh
 python shopping_cart.py
 ```
+
+### Functionality
+1. Start by entering each product identifier, followed by enter.
+2. If you enter an item that is priced by pound, you will be asked to enter the number of pounds for that item.
+3. Once you are finished entering all the products, type "DONE".
+4. The program will then display a receipt with the subtotal, tax, and total. This receipt will also be saved in your local directory under "Receipts" as a .txt file. 
+5. The program will then ask you if you would like to send a receipt to the customer. If you enter "Yes", the program will then ask for the customer's email. 
 

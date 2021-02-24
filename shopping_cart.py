@@ -152,6 +152,8 @@ while True:
     else:
         print("Please input either 'Yes' or 'No'.")
 
+if emailreceipt.lower() == "yes":
+    emailadd = input("Please input the customer's email address: ")
 
 ## write receipts to file
 
@@ -229,7 +231,7 @@ if emailreceipt.lower() == "yes":
 
     client = SendGridAPIClient(SENDGRID_API_KEY)
 
-    message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS)
+    message = Mail(from_email=SENDER_ADDRESS, to_emails=emailadd)
     message.template_id = SENDGRID_TEMPLATE_ID
     message.dynamic_template_data = template_data
 
