@@ -66,14 +66,19 @@ num_products = len(products)
 
 while True:
     product_selection = input("Please input a product identifier, or 'DONE' when finished: ")
+    
+    for p in products:
+        if str(p["id"]) == str(product_selection):
+            prodexists = 1
+            break
+        else: 
+            prodexists = 0
+
+
     if product_selection.lower() == "done":
         break
-    elif product_selection.isnumeric() == False:
-        print("There is no product with that identifier. Please try again! Make sure your product identifier is an integer.")
-        next
-    elif int(product_selection) > num_products:
+    elif prodexists == 0:
         print("There is no product with that identifier. Please try again!")
-        next
     else:
         for p in products:
             if str(p["id"]) == str(product_selection):
